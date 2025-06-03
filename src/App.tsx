@@ -1,10 +1,18 @@
 import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { RealEstate } from './screens/RealEstate';
+import { Properties } from './screens/Properties';
+import { About } from './screens/About';
+import { Contact } from './screens/Contact';
 
-function App() {
+export function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <p>Start prompting (or editing) to see magic happen :)</p>
-    </div>
+    <Routes>
+      <Route path="/" element={<RealEstate />} />
+      <Route path="/properties" element={<Properties />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+    </Routes>
   );
 }
 

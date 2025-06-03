@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Home, User, Building, Phone, Menu, X } from "lucide-react";
 import { Button } from "../../../../components/ui/button";
 import {
@@ -11,13 +12,14 @@ import {
 export const Header = (): JSX.Element => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   // Navigation menu items data
   const navItems = [
-    { label: "Home", icon: Home, active: true },
-    { label: "Properties", icon: Building, active: false },
-    { label: "About", icon: User, active: false },
-    { label: "Contact", icon: Phone, active: false },
+    { label: "Home", icon: Home, path: "/" },
+    { label: "Properties", icon: Building, path: "/properties" },
+    { label: "About", icon: User, path: "/about" },
+    { label: "Contact", icon: Phone, path: "/contact" },
   ];
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export const Header = (): JSX.Element => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo Section */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center">
             <div className="text-slate-800 mr-2">
               <Building className="w-8 h-8" />
             </div>
@@ -54,23 +56,25 @@ export const Header = (): JSX.Element => {
                 Premium Real Estate
               </div>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Navigation Menu */}
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList className="flex space-x-8">
               {navItems.map((item) => (
                 <NavigationMenuItem key={item.label}>
-                  <NavigationMenuLink
-                    className={`font-sans text-base flex items-center gap-1.5 transition-colors ${
-                      item.active
-                        ? "font-medium text-emerald-600"
-                        : "font-normal text-slate-700 hover:text-emerald-600"
-                    }`}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    {item.label}
-                  </NavigationMenuLink>
+                  <Link to={item.path}>
+                    <NavigationMenuLink
+                      className={`font-sans text-base flex items-center gap-1.5 transition-colors ${
+                        location.pathname === item.path
+                          ? "font-medium text-emerald-600"
+                          : "font-normal text-slate-700 hover:text-emerald-600"
+                      }`}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {item.label}
+                    </NavigationMenuLink>
+                  </Link>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
@@ -102,18 +106,19 @@ export const Header = (): JSX.Element => {
         <div className="md:hidden bg-white border-t border-slate-200 mt-3">
           <div className="px-4 py-3 space-y-3">
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.label}
-                href="#"
+                to={item.path}
                 className={`flex items-center gap-3 py-2.5 px-4 rounded ${
-                  item.active
+                  location.pathname === item.path
                     ? "bg-emerald-50 text-emerald-600 font-medium"
                     : "text-slate-700"
                 }`}
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 <item.icon className="h-5 w-5" />
                 {item.label}
-              </a>
+              </Link>
             ))}
             <Button className="w-full bg-emerald-600 hover:bg-emerald-700 mt-2 py-2.5">
               List Your Property
